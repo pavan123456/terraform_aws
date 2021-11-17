@@ -1,0 +1,9 @@
+I’ll point out that this is going to require rules in two different sets of firewalls in two different cloud providers.
+
+VDI (unless the VDI is on prem) is behind the prod azure firewalls, and the target is behind aws dev firewalls.
+
+Since this seems likely to be a common pattern, I suggest we adopt some strategy to simplify this so only one set of firewalls need to be updated in the future.   Run this by security, but I suggest:
+Azure prod firewalls = All traffic from VDI CIDR to aws range allowed, updated once
+Aws firewalls = individual rules to allow specific port, updated as needed.
+
+For hypothetical AWS traffic reaching into azure, the opposite.  A broad rule on the AWS side allowing particular CIDR ranges to all of azure space, and specific rules on the azure firewalls for individual cases.   This way you always know to look to the firewall responsible for a given target network to control traffic coming in.
